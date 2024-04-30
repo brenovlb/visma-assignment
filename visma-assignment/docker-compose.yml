@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  visma-assignment:
+    image: ${DOCKER_REGISTRY-}vismaassignment
+    container_name: employee-api
+    build:
+      context: .
+      dockerfile: visma-assignment/Dockerfile
+    depends_on:
+      - mongodb
+
+# MongoDB Service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+     - "27017:27017"
+
+# Mongo Express Service
+  mongo-express:
+   image: mongo-express:latest
+   container_name: mongo-express
+   environment:
+    - ME_CONFIG_MONGODB_SERVER=mongodb
+    - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+    - ME_CONFIG_MONGODB_ADMINPASSWORD=MongoDB2019!
+    - ME_CONFIG_BASICAUTH_USERNAME=root
+    - ME_CONFIG_BASICAUTH_PASSWORD=root
+   ports:
+    - 8081:8081
+   depends_on:
+      - mongodb
